@@ -1,0 +1,10 @@
+{
+  "name": "emf-visual-explorer",
+  "version": "1.0.0",
+  "description": "Interactive visual explorer for electromagnetic fields around power lines",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  }
+}

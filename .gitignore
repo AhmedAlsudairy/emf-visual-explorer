@@ -1,0 +1,4 @@
+node_modules/
+out.js
+.vercel/
+.DS_Store
