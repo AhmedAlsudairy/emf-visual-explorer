@@ -540,28 +540,70 @@ function SafetyMeter({ distance }) {
 
 // SVG-based visuals (crisp, no canvas needed)
 function TempEffect({ temp }) {
-  const sag=12+((temp-20)/60)*28;
-  const height=Math.max(20,80-sag);
-  const color=temp>50?C.danger:temp>35?'#f39c12':C.safe;
+  const sag = 12 + ((temp - 20) / 60) * 28;
+  const height = Math.max(20, 80 - sag); // 68 at 20C, 40 at 80C
+  const isHot = temp > 50;
+  const color = isHot ? C.danger : temp > 35 ? '#f39c12' : C.safe;
+  
+  // As height decreases, ground level fields increase significantly! (Inverse squareish relation)
+  const baseHeight = 68;
+  const relativeFieldStrength = Math.pow(baseHeight / height, 1.5); // 1.0x at 20C -> ~2.2x at 80C
+
   return (
-    <svg viewBox="0 0 520 200" style={{width:'100%',borderRadius:8,background:C.bg}}>
-      <rect x="0" y="170" width="520" height="30" fill="#2d4a22"/>
-      <line x1="260" y1="170" x2="250" y2="40" stroke="#7f8c8d" strokeWidth="4"/>
-      <line x1="260" y1="170" x2="270" y2="40" stroke="#7f8c8d" strokeWidth="4"/>
-      <line x1="250" y1="40" x2="270" y2="40" stroke="#7f8c8d" strokeWidth="4"/>
-      <line x1="150" y1="60" x2="370" y2="60" stroke="#7f8c8d" strokeWidth="3"/>
-      {[150,260,370].map((wx,i)=>{
-        const colors=[C.phaseA,C.phaseB,C.phaseC];
-        const pts=[];
-        for(let x=wx-55;x<=wx+55;x+=5){ pts.push(`${x},${60+sag*Math.pow((x-wx)/55,2)}`); }
-        return (<g key={i}><polyline points={pts.join(' ')} fill="none" stroke={colors[i]} strokeWidth="2.5"/><circle cx={wx} cy={60} r="7" fill={colors[i]}/></g>);
-      })}
-      <line x1="420" y1={60+sag} x2="420" y2="170" stroke={color} strokeWidth="1.5"/>
-      <text x="435" y={(60+sag+170)/2} fill={color} fontSize="12" dominantBaseline="middle">H={Math.round(height)}m</text>
-      <text x="260" y={60+sag+18} fill={color} fontSize="11" textAnchor="middle">Sag: {Math.round(sag)}m</text>
-      <text x="10" y="20" fill={color} fontSize="13" fontWeight="bold">Temp: {temp}°C</text>
-      <text x="10" y="38" fill={C.sub} fontSize="11">{temp>50?'Very hot — wire expands and sags lower!':temp>35?'Warm — noticeable sag above baseline':'Cool — wire stays near baseline sag'}</text>
-    </svg>
+    <div style={{ position: 'relative' }}>
+      <svg viewBox="0 0 520 220" style={{ width: '100%', borderRadius: 8, background: C.bg }}>
+        {/* Heat haze effect when hot */}
+        {isHot && (
+          <g opacity={(temp - 50) / 30}>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <path key={`heat-${i}`} d={`M${40 + i * 60},170 Q${50 + i * 60 + Math.sin(temp) * 10},120 ${40 + i * 60},70`} fill="none" stroke="#e74c3c" strokeWidth="2" opacity="0.3" strokeDasharray="5,5" />
+            ))}
+          </g>
+        )}
+
+        <rect x="0" y="170" width="520" height="50" fill="#2d4a22" />
+        <line x1="260" y1="170" x2="250" y2="40" stroke="#7f8c8d" strokeWidth="4" />
+        <line x1="260" y1="170" x2="270" y2="40" stroke="#7f8c8d" strokeWidth="4" />
+        <line x1="250" y1="40" x2="270" y2="40" stroke="#7f8c8d" strokeWidth="4" />
+        <line x1="150" y1="60" x2="370" y2="60" stroke="#7f8c8d" strokeWidth="3" />
+        
+        {/* Wires */}
+        {[150, 260, 370].map((wx, i) => {
+          const colors = [C.phaseA, C.phaseB, C.phaseC];
+          const pts = [];
+          for (let x = wx - 55; x <= wx + 55; x += 5) {
+            pts.push(`${x},${60 + sag * Math.pow((x - wx) / 55, 2)}`);
+          }
+          const lowY = 60 + sag;
+          return (
+            <g key={i}>
+              <polyline points={pts.join(' ')} fill="none" stroke={colors[i]} strokeWidth="2.5" />
+              <circle cx={wx} cy={60} r="7" fill={colors[i]} />
+              
+              {/* E-Field concentration around the lowest point of the sagging wire */}
+              <circle cx={wx} cy={lowY} r={10 + relativeFieldStrength * 8} fill="#f39c12" opacity={0.1 + (temp-20)*0.005} />
+            </g>
+          );
+        })}
+        
+        {/* Distance measurement */}
+        <line x1="420" y1={60 + sag} x2="420" y2="170" stroke={color} strokeWidth="1.5" strokeDasharray="4,2" />
+        <text x="435" y={(60 + sag + 170) / 2} fill={color} fontSize="12" dominantBaseline="middle" fontWeight="bold">H={Math.round(height)}m</text>
+        <text x="260" y={60 + sag + 20} fill={color} fontSize="11" textAnchor="middle">Sag: {Math.round(sag)}m</text>
+        
+        <text x="10" y="20" fill={color} fontSize="13" fontWeight="bold">Temp: {temp}°C</text>
+        <text x="10" y="38" fill={C.sub} fontSize="11">{isHot ? 'Hot — higher corona risk & low ground clearance' : 'Cool — optimal clearance, normal permittivity'}</text>
+
+        {/* Meters at ground level */}
+        <rect x="20" y="178" width="160" height="12" rx="6" fill="#0f1923" stroke="#f39c1233" />
+        <rect x="21" y="179" width={Math.min(158, 40 * relativeFieldStrength)} height="10" rx="5" fill="#f39c12" />
+        <text x="190" y="188" fill="#f39c12" fontSize="10" fontWeight="bold">Ground E-Field ({(relativeFieldStrength).toFixed(1)}x)</text>
+
+        <rect x="20" y="196" width="160" height="12" rx="6" fill="#0f1923" stroke="#9b59b633" />
+        <rect x="21" y="197" width={Math.min(158, 40 * relativeFieldStrength)} height="10" rx="5" fill="#9b59b6" />
+        <text x="190" y="206" fill="#9b59b6" fontSize="10" fontWeight="bold">Ground B-Field ({(relativeFieldStrength).toFixed(1)}x)</text>
+      </svg>
+    </div>
   );
 }
 
