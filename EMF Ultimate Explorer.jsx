@@ -690,20 +690,13 @@ function ChapterContent({ id, time, temp, setTemp, wind, setWind, humidity, setH
   if(id===3) return (
     <div>
       <Card>
-        <div style={{display:'flex',gap:8,marginBottom:10}}>
-          {['electric','magnetic'].map(t=>(
-            <button key={t} onClick={()=>setFieldType(t)} style={{padding:'6px 16px',borderRadius:20,border:'none',cursor:'pointer',background:fieldType===t?(t==='electric'?'#f39c12':'#9b59b6'):'#2c3e50',color:'white',fontWeight:'bold',fontSize:13}}>
-              {t==='electric'?'💡 Electric':'🧲 Magnetic'}
-            </button>
-          ))}
-        </div>
-        <Label>{fieldType==='electric'?'Brighter = stronger electric field':'Brighter = stronger magnetic field'}</Label>
-        <FieldHeatmap type={fieldType} time={time}/>
+        <Label>💡 ELECTRIC FIELD MAP — Brighter = stronger electric field</Label>
+        <FieldHeatmap type="electric" time={time}/>
       </Card>
       <Card>
         <Label>📖 HOW TO READ THIS MAP</Label>
-        <div style={{fontSize:14,color:C.text,lineHeight:1.8}}>{fieldType==='electric'?'The orange/yellow glow shows where the electric field is strongest — right near the wires. As you move away (downward toward the ground), the color fades, meaning the field gets weaker. The ground itself acts like a shield.':'The purple glow shows the magnetic field. It wraps around each wire in circles. Three wires together create a complex pattern that partially cancels out — especially far from the line.'}</div>
-        <InfoBox color="#3498db"><b style={{color:'#3498db'}}>Key insight:</b> Both fields drop off quickly with distance. At ground level, the field is already much weaker than right under the wires.</InfoBox>
+        <div style={{fontSize:14,color:C.text,lineHeight:1.8}}>The orange/yellow glow shows where the electric field is strongest — right near the wires. As you move away (downward toward the ground), the color fades, meaning the field gets weaker. The ground itself acts like a shield.</div>
+        <InfoBox color="#3498db"><b style={{color:'#3498db'}}>Key insight:</b> The field drops off quickly with distance. At ground level, the field is already much weaker than right under the wires.</InfoBox>
       </Card>
       <TipBox color="#f39c12" tips={['E-field exists even when no current flows — just having voltage on the wire is enough.','Metal objects (cars, buildings) block the E-field — you get less exposure inside a car under a line.','The E-field is measured in kV/m (kilovolts per metre). ICNIRP limit for public is 5 kV/m.','Trees and hedges can reduce E-field by up to 90% — a natural shield!']}/>
     </div>
