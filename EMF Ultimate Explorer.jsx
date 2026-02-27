@@ -752,6 +752,19 @@ function ChapterContent({ id, time, temp, setTemp, wind, setWind, humidity, setH
           ))}
         </div>
       </Card>
+      <Card>
+        <Label>🔬 PHYSICS: TEMPERATURE vs PERMITTIVITY</Label>
+        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+          <div style={{background:'#0f1923',border:'1px solid #f39c1255',padding:10,borderRadius:8}}>
+            <div style={{color:'#f39c12',fontWeight:'bold',fontSize:13,marginBottom:4}}>⚡ Electric Field (E) & Permittivity (ε)</div>
+            <div style={{color:C.text,fontSize:12,lineHeight:1.5}}>As air heats up, its density decreases. Less dense air has a slightly lower dielectric permittivity (ε). Heat reduces the <b>Dielectric Strength</b> of air, making it easier for the E-field to break down the air and cause corona discharge.</div>
+          </div>
+          <div style={{background:'#0f1923',border:'1px solid #9b59b655',padding:10,borderRadius:8}}>
+            <div style={{color:'#9b59b6',fontWeight:'bold',fontSize:13,marginBottom:4}}>🧲 Magnetic Field (H) & Permeability (μ)</div>
+            <div style={{color:C.text,fontSize:12,lineHeight:1.5}}>Temperature changes have almost <b>zero effect</b> on the magnetic permeability (μ) of air. The H-field passes through hot air exactly the same as cold air. However, hotter wires sag closer to the ground, which means the H-field at ground level will feel stronger!</div>
+          </div>
+        </div>
+      </Card>
       <TipBox color="#e74c3c" tips={['At 60°C, a wire can sag 2–3 m more than at 20°C — that is significant for ground clearance.','Engineers design towers with extra height to ensure safe clearance even on the hottest days.','Cold weather tightens the wire (less sag) — winter EMF readings at ground level are typically lower.','Ice buildup in winter adds weight and can cause extra sag — a double effect!']}/>
     </div>
   );
@@ -798,6 +811,19 @@ function ChapterContent({ id, time, temp, setTemp, wind, setWind, humidity, setH
           ))}
         </div>
       </Card>
+      <Card>
+        <Label>🔬 PHYSICS: DUST vs PERMITTIVITY</Label>
+        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+          <div style={{background:'#0f1923',border:'1px solid #e67e2255',padding:10,borderRadius:8}}>
+            <div style={{color:'#e67e22',fontWeight:'bold',fontSize:13,marginBottom:4}}>⚡ Local Permittivity (ε) Distortion</div>
+            <div style={{color:C.text,fontSize:12,lineHeight:1.5}}>Solid dust particles have a much <b>higher permittivity</b> than plain air. When dust enters the E-field, the field lines bend and concentrate around the particles. This local distortion heavily increases the risk of spark/corona.</div>
+          </div>
+          <div style={{background:'#0f1923',border:'1px solid #9b59b655',padding:10,borderRadius:8}}>
+            <div style={{color:'#9b59b6',fontWeight:'bold',fontSize:13,marginBottom:4}}>🧲 Magnetic Permeability (μ)</div>
+            <div style={{color:C.text,fontSize:12,lineHeight:1.5}}>Common dust (sand, dirt) is non-magnetic. Because its magnetic permeability (μ) equals that of free space, dust has <b>no effect</b> on the Magnetic Field (H).</div>
+          </div>
+        </div>
+      </Card>
       <TipBox color="#e67e22" tips={['Corona discharge creates a faint hissing or crackling sound you can sometimes hear near high-voltage lines.','Charged dust can deposit on insulators, causing "flashover" — a dangerous short circuit.','In desert regions, dust storms are a major maintenance challenge for power lines.','The corona effect also produces ozone (O₃) — you may smell it near very high-voltage lines.','Washing insulators regularly prevents dust buildup and keeps the line safe.']}/>
     </div>
   );
@@ -826,6 +852,19 @@ function ChapterContent({ id, time, temp, setTemp, wind, setWind, humidity, setH
           ))}
         </div>
         <InfoBox color="#00bcd4">💧 Humid air and rain create water droplets on lines. These act as sharp points, which dramatically <b>increases</b> corona discharge and creates the crackling sound you hear.</InfoBox>
+      </Card>
+      <Card>
+        <Label>🔬 PHYSICS: HUMIDITY vs PERMITTIVITY</Label>
+        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+          <div style={{background:'#0f1923',border:'1px solid #00bcd455',padding:10,borderRadius:8}}>
+            <div style={{color:'#00bcd4',fontWeight:'bold',fontSize:13,marginBottom:4}}>⚡ High Permittivity of Water (εr ≈ 80)</div>
+            <div style={{color:C.text,fontSize:12,lineHeight:1.5}}>Pure air has a relative permittivity of ~1. Liquid water has a massive permittivity of ~80! When humidity forms droplets in the air or on wires, it severely warps the surrounding E-field and increases the medium's average permittivity, leading to heavy leakage.</div>
+          </div>
+          <div style={{background:'#0f1923',border:'1px solid #9b59b655',padding:10,borderRadius:8}}>
+            <div style={{color:'#9b59b6',fontWeight:'bold',fontSize:13,marginBottom:4}}>🧲 Magnetic Permeability (μ)</div>
+            <div style={{color:C.text,fontSize:12,lineHeight:1.5}}>Water is slightly diamagnetic, but effectively its magnetic permeability is identical to air. Rain, fog, or high humidity have <b>zero impact</b> on the transmission of the Magnetic Field (H).</div>
+          </div>
+        </div>
       </Card>
       <TipBox color="#00bcd4" tips={['Humid air has higher permittivity — this slightly reduces the ambient E-field strength.','At very high humidity (above 80%), water films form on insulators, creating leakage current paths.','Water droplets act as sharp emission points, which is why lines buzz loudly in rain or fog.','Fog and mist are extreme humidity cases — they can cause visible purple corona glow at night.','Power companies wash insulators regularly in humid coastal regions to prevent flashover.']}/>
     </div>
